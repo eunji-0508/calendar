@@ -1,12 +1,13 @@
 package org.example.calendar.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.calendar.dto.CalendarCreateResponseDto;
+import org.example.calendar.dto.CalendarReadResponseDto;
 import org.example.calendar.dto.CalendarRequestDto;
-import org.example.calendar.dto.CalendarResponseDto;
 import org.example.calendar.service.CalendarService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +16,20 @@ public class CalendarController {
 
     // 생성
     @PostMapping("/calendars")
-    public CalendarResponseDto createCalendar(
+    public CalendarCreateResponseDto createCalendar(
             @RequestBody CalendarRequestDto calendarRequestDto
     ) {
         return calendarService.createCalendar(calendarRequestDto);
     }
+
+    // 전체 일정 조회
+    // @RequestParam(required = )로 파라미터 필수 여부 결정 가능함
+    @GetMapping("/calendars")
+    public List<CalendarReadResponseDto> getCalendar(@RequestParam(required = false) String name) {
+        return calendarService.getCalendar(name);
+    }
+
+    // 선택 일정 조회
+    @GetMapping("/calendars")
+    public
 }

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/calendar
+    url: jdbc:mysql://localhost:3306/schedule
     username: root
     password: Mysql0508!
     driver-class-name: com.mysql.cj.jdbc.Driver

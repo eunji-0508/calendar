@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class CalendarApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(CalendarApplication.class, args);
     }
