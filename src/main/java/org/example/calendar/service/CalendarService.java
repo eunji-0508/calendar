@@ -112,4 +112,19 @@ public class CalendarService {
                 calendar.getModifiedAt()
         );
     }
+
+    // 일정 삭제 (Delete)
+    @Transactional
+    public void deleteCalendar(Long id, CalendarDeleteRequestDto calendarDeleteRequestDto) {
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
+        );
+
+        if (calendar.getPasswd() == null || calendarDeleteRequestDto.getPasswd() == null
+                || calendarDeleteRequestDto.getPasswd().isEmpty() || calendar.getPasswd().isEmpty()
+                || !calendarDeleteRequestDto.getPasswd().equals(calendar.getPasswd())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        calendarRepository.deleteById(id);
+    }
 }

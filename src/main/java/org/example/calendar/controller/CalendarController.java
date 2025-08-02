@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.calendar.dto.*;
 import org.example.calendar.service.CalendarService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -12,7 +11,7 @@ import java.util.List;
 public class CalendarController {
     private final CalendarService calendarService;
 
-    // 생성
+    // 일정 생성
     @PostMapping("/calendars")
     public CalendarCreateResponseDto createCalendar(
             @RequestBody CalendarRequestDto calendarRequestDto
@@ -42,5 +41,14 @@ public class CalendarController {
             @RequestBody CalendarUpdateRequestDto calendarUpdateRequestDto
     ) {
         return calendarService.updateCalendar(calendarId, calendarUpdateRequestDto);
+    }
+
+    // 일정 삭제
+    @DeleteMapping("/calendars/{calendarId}")
+    public void deleteCalendar(
+            @PathVariable Long calendarId,
+            @RequestBody CalendarDeleteRequestDto calendarDeleteRequestDto
+    ) {
+        calendarService.deleteCalendar(calendarId, calendarDeleteRequestDto);
     }
 }
