@@ -26,4 +26,9 @@ public class Calendar extends BaseEntity {
         this.name = name;
         this.passwd = passwd;
     }
+
+    public void updateTwoField(String title, String name) {
+        this.title = title;
+        this.name = name;
+    }
 }

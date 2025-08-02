@@ -1,10 +1,7 @@
 package org.example.calendar.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.calendar.dto.CalendarCreateResponseDto;
-import org.example.calendar.dto.CalendarReadResponseDto;
-import org.example.calendar.dto.CalendarRequestDto;
-import org.example.calendar.dto.CalendarResponseDto;
+import org.example.calendar.dto.*;
 import org.example.calendar.entity.Calendar;
 import org.example.calendar.repository.CalendarRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +19,7 @@ public class CalendarService {
     // 일정 생성 (Create)
     // 일정 제목, 일정 내용, 작성자명, 비밀번호, 작성/수정일을 저장함
     @Transactional
-    public CalendarCreateResponseDto createCalendar(CalendarRequestDto calendarRequestDto){
+    public CalendarCreateResponseDto createCalendar(CalendarRequestDto calendarRequestDto) {
         Calendar calendar = new Calendar(
                 calendarRequestDto.getTitle(),
                 calendarRequestDto.getContents(),
@@ -50,7 +47,7 @@ public class CalendarService {
         List<Calendar> calendars;
 
         // 트러블 슈팅 : 무조건 이름은 들어온다고 생각함
-        if(name == null || name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             calendars = calendarRepository.findAll();
         } else {
             calendars = calendarRepository.findAllByName(name);
@@ -83,6 +80,34 @@ public class CalendarService {
                 calendar.getId(),
                 calendar.getTitle(),
                 calendar.getContents(),
+                calendar.getCreatedAt(),
+                calendar.getModifiedAt()
+        );
+    }
+
+    // 일정 수정 (Update)
+    @Transactional
+    public CalendarUpdateResponseDto updateCalendar(Long id, CalendarUpdateRequestDto calendarUpdateRequestDto) {
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
+        );
+
+        // "exit".equals(exit) 형태로는 둘 다 값을 받아와야 하니 못씀
+        // Condition 'calendarUpdateRequestDto.getPasswd() == null' is always 'false' 이라고 노란줄로 알려줌
+        // 입력 안하고 null 보낼 수도 있지 않나요?
+        if (calendar.getPasswd() == null || calendarUpdateRequestDto.getPasswd() == null
+                || calendarUpdateRequestDto.getPasswd().isEmpty() || calendar.getPasswd().isEmpty()
+                || !calendarUpdateRequestDto.getPasswd().equals(calendar.getPasswd())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        calendar.updateTwoField(calendarUpdateRequestDto.getTitle(), calendarUpdateRequestDto.getName());
+
+        return new CalendarUpdateResponseDto(
+                calendar.getId(),
+                calendar.getTitle(),
+                calendar.getContents(),
+                calendar.getName(),
                 calendar.getCreatedAt(),
                 calendar.getModifiedAt()
         );

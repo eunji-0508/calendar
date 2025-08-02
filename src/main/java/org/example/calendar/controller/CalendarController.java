@@ -1,9 +1,7 @@
 package org.example.calendar.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.calendar.dto.CalendarCreateResponseDto;
-import org.example.calendar.dto.CalendarReadResponseDto;
-import org.example.calendar.dto.CalendarRequestDto;
+import org.example.calendar.dto.*;
 import org.example.calendar.service.CalendarService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +33,14 @@ public class CalendarController {
             @PathVariable Long calendarId
     ) {
         return calendarService.getCalendar(calendarId);
+    }
+
+    // 일정 수정
+    @PatchMapping("/calendars/{calendarId}")
+    public CalendarUpdateResponseDto updateCalendar(
+            @PathVariable Long calendarId,
+            @RequestBody CalendarUpdateRequestDto calendarUpdateRequestDto
+    ) {
+        return calendarService.updateCalendar(calendarId, calendarUpdateRequestDto);
     }
 }
