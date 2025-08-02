@@ -30,6 +30,10 @@ public class CalendarController {
     }
 
     // 선택 일정 조회
-    @GetMapping("/calendars")
-    public
+    @GetMapping("/calendars/{calendarId}")
+    public CalendarReadResponseDto getCalendar(
+            @PathVariable Long calendarId
+    ) {
+        return calendarService.getCalendar(calendarId);
+    }
 }

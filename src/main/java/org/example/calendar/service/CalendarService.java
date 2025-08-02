@@ -72,4 +72,19 @@ public class CalendarService {
         dtoList.sort(Comparator.comparing(CalendarReadResponseDto::getModifiedAt).reversed());
         return dtoList;
     }
+
+    // 단일 일정 조회 (read)
+    @Transactional(readOnly = true)
+    public CalendarReadResponseDto getCalendar(Long id) {
+        Calendar calendar = calendarRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
+        );
+        return new CalendarReadResponseDto(
+                calendar.getId(),
+                calendar.getTitle(),
+                calendar.getContents(),
+                calendar.getCreatedAt(),
+                calendar.getModifiedAt()
+        );
+    }
 }
