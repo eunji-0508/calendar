@@ -200,3 +200,9 @@
 | 일정 수정 | PUT      | `/calendars/{calendarId}` | 비밀번호 검증 | 제목, 작성자명만 수정 가능. `createdAt` 유지, `modifiedAt` 갱신. |
 | 일정 삭제 | DELETE   | `/calendars/{calendarId}` | 비밀번호 검증 | 해당 id의 비밀번호 일치 시 일정 삭제.                           |
 
+<br  >
+
+---
+## [ ERD ]
+[ERD 확인하기](https://www.erdcloud.com/d/sZawiBW3rY8jcnCrm)
+
