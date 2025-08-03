@@ -14,12 +14,12 @@ public class CalendarCreateResponseDto {
     private final LocalDateTime modifiedAt;
 
     // 일정 생성에서 사용되는 생성자
-    public CalendarCreateResponseDto(Long id, String title, String contents, String name, LocalDateTime createAt, LocalDateTime modifiedAt) {
+    public CalendarCreateResponseDto(Long id, String title, String contents, String name, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.name = name;
-        this.createdAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
 }

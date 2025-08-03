@@ -13,11 +13,11 @@ public class CalendarReadResponseDto {
     private final LocalDateTime modifiedAt;
 
     // 일정 조회에 사용되는 생성자
-    public CalendarReadResponseDto(Long id, String title, String contents, LocalDateTime createAt, LocalDateTime modifiedAt) {
+    public CalendarReadResponseDto(Long id, String title, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.title = title;
         this.contents = contents;
-        this.createdAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
 }

@@ -6,10 +6,9 @@ import org.example.calendar.entity.Calendar;
 import org.example.calendar.repository.CalendarRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,12 @@ public class CalendarService {
     // 일정 생성 (Create)
     // 일정 제목, 일정 내용, 작성자명, 비밀번호, 작성/수정일을 저장함
     @Transactional
-    public CalendarCreateResponseDto createCalendar(CalendarRequestDto calendarRequestDto) {
+    public CalendarCreateResponseDto createCalendar(CalendarCreateRequestDto calendarCreateRequestDto) {
         Calendar calendar = new Calendar(
-                calendarRequestDto.getTitle(),
-                calendarRequestDto.getContents(),
-                calendarRequestDto.getName(),
-                calendarRequestDto.getPasswd()
+                calendarCreateRequestDto.getTitle(),
+                calendarCreateRequestDto.getContents(),
+                calendarCreateRequestDto.getName(),
+                calendarCreateRequestDto.getPasswd()
         );
 
         Calendar savedCalendar = calendarRepository.save(calendar);
@@ -53,20 +52,15 @@ public class CalendarService {
             calendars = calendarRepository.findAllByName(name);
         }
 
-        List<CalendarReadResponseDto> dtoList = new ArrayList<>();
-
-        for (Calendar calendar : calendars) {
-            CalendarReadResponseDto calendarReadResponseDto = new CalendarReadResponseDto(
-                    calendar.getId(),
-                    calendar.getTitle(),
-                    calendar.getContents(),
-                    calendar.getCreatedAt(),
-                    calendar.getModifiedAt()
-            );
-            dtoList.add(calendarReadResponseDto);
-        }
         // 트러블 슈팅: 수정일 기준 내림차순 정렬 (블로그 참고)
-        dtoList.sort(Comparator.comparing(CalendarReadResponseDto::getModifiedAt).reversed());
+        List<CalendarReadResponseDto> dtoList = calendars.stream().map(calendar -> new CalendarReadResponseDto(
+                calendar.getId(),
+                calendar.getTitle(),
+                calendar.getContents(),
+                calendar.getCreatedAt(),
+                calendar.getModifiedAt()
+        )).sorted(Comparator.comparing(CalendarReadResponseDto::getModifiedAt).reversed()).collect(Collectors.toList());
+
         return dtoList;
     }
 
