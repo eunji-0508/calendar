@@ -36,7 +36,7 @@ public class CalendarController {
     }
 
     // 일정 수정
-    @PutMapping("/calendars/{calendarId}")
+    @PatchMapping("/calendars/{calendarId}")
     public ResponseEntity<CalendarUpdateResponseDto> updateCalendar(
             @PathVariable Long calendarId,
             @RequestBody CalendarUpdateRequestDto calendarUpdateRequestDto

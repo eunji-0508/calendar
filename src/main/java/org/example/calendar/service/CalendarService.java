@@ -53,7 +53,7 @@ public class CalendarService {
         }
 
         // 트러블 슈팅: 수정일 기준 내림차순 정렬 (블로그 참고)
-        List<CalendarReadResponseDto> dtoList = calendars.stream().map(calendar -> new CalendarReadResponseDto(
+        return calendars.stream().map(calendar -> new CalendarReadResponseDto(
                 calendar.getId(),
                 calendar.getTitle(),
                 calendar.getContents(),
@@ -61,15 +61,15 @@ public class CalendarService {
                 calendar.getModifiedAt()
         )).sorted(Comparator.comparing(CalendarReadResponseDto::getModifiedAt).reversed()).collect(Collectors.toList());
 
-        return dtoList;
     }
 
     // 단일 일정 조회 (read)
     @Transactional(readOnly = true)
     public CalendarReadResponseDto getCalendar(Long id) {
-        Calendar calendar = calendarRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
-        );
+        // 같은 클래스 내부에서는 메서드를 = 메서드명() 형태로 호출할 수 있음
+        // 익숙한 형태가 아니라 다소 어색해보여서 자주 사용하면서 연습하면 좋을 것 같음
+        Calendar calendar = findCalendarById(id);
+
         return new CalendarReadResponseDto(
                 calendar.getId(),
                 calendar.getTitle(),
@@ -82,13 +82,9 @@ public class CalendarService {
     // 일정 수정 (Update)
     @Transactional
     public CalendarUpdateResponseDto updateCalendar(Long id, CalendarUpdateRequestDto calendarUpdateRequestDto) {
-        Calendar calendar = calendarRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
-        );
+        Calendar calendar = findCalendarById(id);
 
         // "exit".equals(exit) 형태로는 둘 다 값을 받아와야 하니 못씀
-        // Condition 'calendarUpdateRequestDto.getPasswd() == null' is always 'false' 이라고 노란줄로 알려줌
-        // 입력 안하고 null 보낼 수도 있지 않나요?
         if (calendar.getPasswd() == null || calendarUpdateRequestDto.getPasswd() == null
                 || calendarUpdateRequestDto.getPasswd().isEmpty() || calendar.getPasswd().isEmpty()
                 || !calendarUpdateRequestDto.getPasswd().equals(calendar.getPasswd())) {
@@ -110,9 +106,7 @@ public class CalendarService {
     // 일정 삭제 (Delete)
     @Transactional
     public void deleteCalendar(Long id, CalendarDeleteRequestDto calendarDeleteRequestDto) {
-        Calendar calendar = calendarRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
-        );
+        Calendar calendar = findCalendarById(id);
 
         if (calendar.getPasswd() == null || calendarDeleteRequestDto.getPasswd() == null
                 || calendarDeleteRequestDto.getPasswd().isEmpty() || calendar.getPasswd().isEmpty()
@@ -120,5 +114,13 @@ public class CalendarService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         calendarRepository.deleteById(id);
+    }
+
+    // 비밀번호 검증 메서드 (튜터님 추천으로 만들었음)
+    // 반복되는 부분을 메서드로 추출하여 더 깔끔하게 작성하는 것이 가능함
+    private Calendar findCalendarById(Long id) {
+        return calendarRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 id는 존재하지 않습니다.")
+        );
     }
 }

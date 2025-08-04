@@ -133,7 +133,7 @@
 ---
 ### [ 일정을 수정하는 API ]
 
-* URL : PUT /calendars/{calendarId}
+* URL : PATCH /calendars/{calendarId}
 
 
 * 인증/인가 : 비밀번호로 검증
@@ -197,7 +197,7 @@
 | 일정 생성 | POST     | `/calendars`              | 없음      | `title`, `name` 필수.                               |
 | 전체 조회 | GET      | `/calendars?name={작성자명}`  | 없음      | 작성자명 필터 가능. 없으면 전체 조회. `modifiedAt` 내림차순 정렬.      |
 | 단일 조회 | GET      | `/calendars/{calendarId}` | 없음      | id에 해당하는 일정 조회.                                   |
-| 일정 수정 | PUT      | `/calendars/{calendarId}` | 비밀번호 검증 | 제목, 작성자명만 수정 가능. `createdAt` 유지, `modifiedAt` 갱신. |
+| 일정 수정 | PATCH    | `/calendars/{calendarId}` | 비밀번호 검증 | 제목, 작성자명만 수정 가능. `createdAt` 유지, `modifiedAt` 갱신. |
 | 일정 삭제 | DELETE   | `/calendars/{calendarId}` | 비밀번호 검증 | 해당 id의 비밀번호 일치 시 일정 삭제.                           |
 
 <br  >
